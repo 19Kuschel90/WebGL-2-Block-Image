@@ -13,7 +13,7 @@ var gRLoop:C_RenderLoop;
 var Resources:any = null;
 var gCubes:C_Modal[] = [];
 var gInputManager:C_InputManager = new C_InputManager();
-var gVertex_shader:any =  '#version 300 es' + "\n"+
+const gVertex_shader:any =  '#version 300 es' + "\n"+
 'in vec4 a_position;' + "\n"+
 'in vec3 a_norm;' + "\n"+
 'in vec2 a_uv;' + "\n"+
@@ -35,7 +35,7 @@ var gVertex_shader:any =  '#version 300 es' + "\n"+
 
 	'gl_Position = uPMatrix * uCameraMatrix * uMVMatrix * vec4(a_position.xyz, 1.0); ' + "\n"+
 '}';
-var gFragment_shader:any = 
+const  gFragment_shader:any = 
 		'#version 300 es ' + "\n"+
 		'precision mediump float; ' + "\n"+
 		'uniform sampler2D uAltas; ' + "\n"+
@@ -43,17 +43,20 @@ var gFragment_shader:any =
 		'out vec4 outColor; ' + "\n"+
 
 		'void main(void){ outColor = texture(uAltas,vUV); } ' ;
-var uPositonX:number = 0;
-var uPositonY:number = 0;
-var temp:number = 15;
-var NewLine:number = 0;
-var moveBot:C_MoveBot[] = [];
+		var moveBot:C_MoveBot[] = [];
+		var { uPositonX, uPositonY, temp, NewLine }: { uPositonX: number; uPositonY: number; temp: number; NewLine: number; } = BotHelperNumbers();
 
+function BotHelperNumbers() {
+	var uPositonX: number = 0;
+	var uPositonY: number = 0;
+	var temp: number = 15;
+	var NewLine: number = 0;
+	return { uPositonX, uPositonY, temp, NewLine };
+}
 
+//#region init webgl
 function main():void
 {
-
-
 	// init webgl2
 	gl = GLInstance("webglCanvas").fFitScreen(0.95,0.9).fClear();
 	gCamera = new C_Camera(gl);
@@ -62,7 +65,9 @@ function main():void
 	gRLoop = new C_RenderLoop(onRender,30);
 	C_Resources.setup(gl,onReady).loadTexture("atlas",gInputManager.atlasLink).start();
 }
+//#endregion
 
+//#region Load Objects
 function onReady():void{
 	gShader = new C_ShaderBuilder(gl,gVertex_shader,gFragment_shader)
 	.prepareUniforms("uPMatrix","mat4"
@@ -84,7 +89,9 @@ function onReady():void{
 		}
 	gRLoop.start();	
 	}
+//#endregion
 
+//#region Render Loop 
 function onRender(dt:number):void{
 		gl.fClear();
 		gCamera.updateViewMatrix();
@@ -105,7 +112,7 @@ function onRender(dt:number):void{
 			}
 		}
 }
-
+//#endregion
 
 function SetPositioninTexture(i:number):void{
 	if(i >= temp)
@@ -119,6 +126,7 @@ function SetPositioninTexture(i:number):void{
 	}
 }
 
+//#region Shutdown
 function Shutdown()
 {
 	 gl = null;
@@ -142,6 +150,7 @@ function Shutdown()
  //  gVertex_shader = null;
  //  gFragment_shader = null;
 }
+//#endregion
 
 function NewStart()
 {

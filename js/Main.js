@@ -38,11 +38,16 @@ var gFragment_shader = '#version 300 es ' + "\n" +
     'in highp vec2 vUV; ' + "\n" +
     'out vec4 outColor; ' + "\n" +
     'void main(void){ outColor = texture(uAltas,vUV); } ';
-var uPositonX = 0;
-var uPositonY = 0;
-var temp = 15;
-var NewLine = 0;
 var moveBot = [];
+var _a = BotHelperNumbers(), uPositonX = _a.uPositonX, uPositonY = _a.uPositonY, temp = _a.temp, NewLine = _a.NewLine;
+function BotHelperNumbers() {
+    var uPositonX = 0;
+    var uPositonY = 0;
+    var temp = 15;
+    var NewLine = 0;
+    return { uPositonX: uPositonX, uPositonY: uPositonY, temp: temp, NewLine: NewLine };
+}
+//#region init webgl
 function main() {
     // init webgl2
     gl = GLInstance("webglCanvas").fFitScreen(0.95, 0.9).fClear();
@@ -52,6 +57,8 @@ function main() {
     gRLoop = new C_RenderLoop(onRender, 30);
     C_Resources.setup(gl, onReady).loadTexture("atlas", gInputManager.atlasLink).start();
 }
+//#endregion
+//#region Load Objects
 function onReady() {
     gShader = new C_ShaderBuilder(gl, gVertex_shader, gFragment_shader)
         .prepareUniforms("uPMatrix", "mat4", "uMVMatrix", "mat4", "uCameraMatrix", "mat4", "uFaces", "2fv", "uPositonX", "fv", "uPositonY", "fv")
@@ -68,6 +75,8 @@ function onReady() {
     }
     gRLoop.start();
 }
+//#endregion
+//#region Render Loop 
 function onRender(dt) {
     gl.fClear();
     gCamera.updateViewMatrix();
@@ -86,6 +95,7 @@ function onRender(dt) {
         }
     }
 }
+//#endregion
 function SetPositioninTexture(i) {
     if (i >= temp) {
         temp += 16;
@@ -96,6 +106,7 @@ function SetPositioninTexture(i) {
         uPositonX++;
     }
 }
+//#region Shutdown
 function Shutdown() {
     gl = null;
     gModal = null;
@@ -117,6 +128,7 @@ function Shutdown() {
     //  gVertex_shader = null;
     //  gFragment_shader = null;
 }
+//#endregion
 function NewStart() {
     Shutdown();
     gInputManager.update();
