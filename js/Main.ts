@@ -1,4 +1,23 @@
 window.addEventListener("load",function(){
+	var fileInput:any = document.getElementById('fileInput');
+	var imgFile:any = document.getElementById('imgFile');
+	(<HTMLElement>fileInput).addEventListener('change', function(e) {
+		var file = 	(<any>fileInput).files[0];
+		var imageType = /image.*/;
+		if (file.type.match(imageType)) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				imgFile.innerHTML = "";
+				var img = new Image();
+				img.src = reader.result;
+				
+				imgFile.appendChild(img);
+			}
+			reader.readAsDataURL(file);
+		} else {
+			imgFile.innerHTML = "Dateityp nicht unterstützt"
+		}
+	});
     main();
 });
 var gl:any = null;

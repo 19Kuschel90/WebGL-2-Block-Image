@@ -1,5 +1,24 @@
 "use strict";
 window.addEventListener("load", function () {
+    var fileInput = document.getElementById('fileInput');
+    var imgFile = document.getElementById('imgFile');
+    fileInput.addEventListener('change', function (e) {
+        var file = fileInput.files[0];
+        var imageType = /image.*/;
+        if (file.type.match(imageType)) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                imgFile.innerHTML = "";
+                var img = new Image();
+                img.src = reader.result;
+                imgFile.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+        else {
+            imgFile.innerHTML = "Dateityp nicht unterstützt";
+        }
+    });
     main();
 });
 var gl = null;
