@@ -12,6 +12,7 @@ var C_InputManager = /** @class */ (function () {
         this.startPos.z = Number(document.getElementById("SZ").value);
         this.canvasSizeW = Number(document.getElementById("canvasSizeW").value);
         this.canvasSizeH = Number(document.getElementById("canvasSizeH").value);
+        this.atlasLink = document.getElementById("imgFile").children[0].src;
     };
     return C_InputManager;
 }());

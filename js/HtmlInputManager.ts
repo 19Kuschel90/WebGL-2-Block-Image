@@ -9,8 +9,9 @@ class  C_InputManager {
       this.startPos.x = Number((<HTMLInputElement>document.getElementById("SX")).value);
       this.startPos.y = Number((<HTMLInputElement>document.getElementById("SY")).value);
       this.startPos.z = Number((<HTMLInputElement>document.getElementById("SZ")).value);
-      this.canvasSizeW =  Number((<HTMLInputElement>document.getElementById("canvasSizeW")).value)
-      this.canvasSizeH =  Number((<HTMLInputElement>document.getElementById("canvasSizeH")).value)
-
+      this.canvasSizeW =  Number((<HTMLInputElement>document.getElementById("canvasSizeW")).value);
+      this.canvasSizeH =  Number((<HTMLInputElement>document.getElementById("canvasSizeH")).value);
+      
+      this.atlasLink = (<any> (<HTMLInputElement> document.getElementById("imgFile"))).children[0].src;
     }
 }
