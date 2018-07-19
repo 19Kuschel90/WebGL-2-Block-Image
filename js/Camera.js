@@ -1,9 +1,6 @@
 "use strict";
-var C_Camera = /** @class */ (function () {
-    function C_Camera(gl, fov, near, far) {
-        if (fov === void 0) { fov = 45; }
-        if (near === void 0) { near = 0.1; }
-        if (far === void 0) { far = 100.0; }
+class C_Camera {
+    constructor(gl, fov = 45, near = 0.1, far = 100.0) {
         this.projectionMatrix = new Float32Array(16);
         this.viewMatrix = new Float32Array(16);
         this.mode = 0;
@@ -18,23 +15,23 @@ var C_Camera = /** @class */ (function () {
         this.mode = 1; //Set what sort of control mode to use.
     }
     ;
-    C_Camera.prototype.panX = function (v) {
+    panX(v) {
         if (this.mode == 1)
             return; // Panning on the X Axis is only allowed when in free mode
         this.updateViewMatrix();
         this.transform.position.x += this.transform.right[0] * v;
         this.transform.position.y += this.transform.right[1] * v;
         this.transform.position.z += this.transform.right[2] * v;
-    };
-    C_Camera.prototype.panY = function (v) {
+    }
+    panY(v) {
         this.updateViewMatrix();
         this.transform.position.y += this.transform.up[1] * v;
         if (this.mode == 1)
             return; //Can only move up and down the y axix in orbit mode
         this.transform.position.x += this.transform.up[0] * v;
         this.transform.position.z += this.transform.up[2] * v;
-    };
-    C_Camera.prototype.panZ = function (v) {
+    }
+    panZ(v) {
         this.updateViewMatrix();
         if (this.mode == 1) {
             this.transform.position.z += v; //orbit mode does translate after rotate, so only need to set Z, the rotate will handle the rest.
@@ -45,9 +42,9 @@ var C_Camera = /** @class */ (function () {
             this.transform.position.y += this.transform.forward[1] * v;
             this.transform.position.z += this.transform.forward[2] * v;
         }
-    };
+    }
     //To have different modes of movements, this function handles the view matrix update for the transform object.
-    C_Camera.prototype.updateViewMatrix = function () {
+    updateViewMatrix() {
         //Optimize camera transform update, no need for scale nor rotateZ
         if (this.mode == 0) {
             this.transform.matView.reset()
@@ -65,19 +62,18 @@ var C_Camera = /** @class */ (function () {
         //Cameras work by doing the inverse transformation on all meshes, the camera itself is a lie :)
         C_Matrix4.invert(this.viewMatrix, this.transform.matView.raw);
         return this.viewMatrix;
-    };
-    C_Camera.prototype.rest = function () {
+    }
+    rest() {
         this.projectionMatrix = new Float32Array(16);
         this.viewMatrix = new Float32Array(16);
         ;
         this.mode = 0;
         this.Camera = 1;
         this.transform = new C_Transform();
-    };
-    return C_Camera;
-}());
-var C_CameraController = /** @class */ (function () {
-    function C_CameraController(gl, camera) {
+    }
+}
+class C_CameraController {
+    constructor(gl, camera) {
         this.canvas = null;
         this.camera = null;
         this.rotateRate = 0;
@@ -110,24 +106,24 @@ var C_CameraController = /** @class */ (function () {
         this.canvas.addEventListener("mousewheel", function (e) { oThis.onMouseWheel(e); }); //Handles zoom/forward movement
     }
     //Transform mouse x,y cords to something useable by the canvas.
-    C_CameraController.prototype.getMouseVec2 = function (e) { return { x: e.pageX - this.offsetX, y: e.pageY - this.offsetY }; };
+    getMouseVec2(e) { return { x: e.pageX - this.offsetX, y: e.pageY - this.offsetY }; }
     //Begin listening for dragging movement
-    C_CameraController.prototype.onMouseDown = function (e) {
+    onMouseDown(e) {
         this.initX = this.prevX = e.pageX - this.offsetX;
         this.initY = this.prevY = e.pageY - this.offsetY;
         this.canvas.addEventListener("mouseup", this.onUpHandler);
         this.canvas.addEventListener("mousemove", this.onMoveHandler);
-    };
+    }
     //End listening for dragging movement
-    C_CameraController.prototype.onMouseUp = function (e) {
+    onMouseUp(e) {
         this.canvas.removeEventListener("mouseup", this.onUpHandler);
         this.canvas.removeEventListener("mousemove", this.onMoveHandler);
-    };
-    C_CameraController.prototype.onMouseWheel = function (e) {
+    }
+    onMouseWheel(e) {
         var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))); //Try to map wheel movement to a number between -1 and 1
         this.camera.panZ(delta * (this.zoomRate / this.canvas.height)); //Keep the movement speed the same, no matter the height diff
-    };
-    C_CameraController.prototype.onMouseMove = function (e) {
+    }
+    onMouseMove(e) {
         var x = e.pageX - this.offsetX, //Get X,y where the canvas's position is origin.
         y = e.pageY - this.offsetY, dx = x - this.prevX, //Difference since last mouse move
         dy = y - this.prevY;
@@ -142,8 +138,8 @@ var C_CameraController = /** @class */ (function () {
         }
         this.prevX = x;
         this.prevY = y;
-    };
-    C_CameraController.prototype.rest = function () {
+    }
+    rest() {
         this.canvas = null;
         this.camera = null;
         this.rotateRate = 0;
@@ -157,7 +153,6 @@ var C_CameraController = /** @class */ (function () {
         this.prevY = 0;
         this.onUpHandler = null;
         this.onMoveHandler = null;
-    };
-    return C_CameraController;
-}());
+    }
+}
 //# sourceMappingURL=Camera.js.map

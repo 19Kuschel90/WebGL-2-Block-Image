@@ -33,7 +33,7 @@ var gRLoop;
 var Resources = null;
 var gCubes = [];
 var gInputManager = new C_InputManager();
-var gVertex_shader = '#version 300 es' + "\n" +
+const gVertex_shader = '#version 300 es' + "\n" +
     'in vec4 a_position;' + "\n" +
     'in vec3 a_norm;' + "\n" +
     'in vec2 a_uv;' + "\n" +
@@ -51,20 +51,20 @@ var gVertex_shader = '#version 300 es' + "\n" +
     'vUV = vec2(u,v);' + "\n" +
     'gl_Position = uPMatrix * uCameraMatrix * uMVMatrix * vec4(a_position.xyz, 1.0); ' + "\n" +
     '}';
-var gFragment_shader = '#version 300 es ' + "\n" +
+const gFragment_shader = '#version 300 es ' + "\n" +
     'precision mediump float; ' + "\n" +
     'uniform sampler2D uAltas; ' + "\n" +
     'in highp vec2 vUV; ' + "\n" +
     'out vec4 outColor; ' + "\n" +
     'void main(void){ outColor = texture(uAltas,vUV); } ';
 var moveBot = [];
-var _a = BotHelperNumbers(), uPositonX = _a.uPositonX, uPositonY = _a.uPositonY, temp = _a.temp, NewLine = _a.NewLine;
+var { uPositonX, uPositonY, temp, NewLine } = BotHelperNumbers();
 function BotHelperNumbers() {
     var uPositonX = 0;
     var uPositonY = 0;
     var temp = 15;
     var NewLine = 0;
-    return { uPositonX: uPositonX, uPositonY: uPositonY, temp: temp, NewLine: NewLine };
+    return { uPositonX, uPositonY, temp, NewLine };
 }
 //#region init webgl
 function main() {

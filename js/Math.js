@@ -1,76 +1,65 @@
 "use strict";
-var C_MathUtil = /** @class */ (function () {
-    function C_MathUtil() {
-    }
+class C_MathUtil {
     //Normalize x value to x range, then normalize to lerp the z range.
-    C_MathUtil.Map = function (x, xMin, xMax, zMin, zMax) { return (x - xMin) / (xMax - xMin) * (zMax - zMin) + zMin; };
-    return C_MathUtil;
-}());
+    static Map(x, xMin, xMax, zMin, zMax) { return (x - xMin) / (xMax - xMin) * (zMax - zMin) + zMin; }
+}
 //###########################################################################################
-var C_Vector3 = /** @class */ (function () {
-    function C_Vector3(x, y, z) {
-        this.x = x || 0.0;
-        this.y = y || 0.0;
-        this.z = z || 0.0;
-    }
-    C_Vector3.prototype.magnitude = function (v) {
-        if (v === void 0) { v = undefined; }
+class C_Vector3 {
+    constructor(x, y, z) { this.x = x || 0.0; this.y = y || 0.0; this.z = z || 0.0; }
+    magnitude(v = undefined) {
         //Only get the magnitude of this vector
         if (v === undefined)
             return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
         //Get magnitude based on another vector
         var x = v.x - this.x, y = v.y - this.y, z = v.y - this.z;
         return Math.sqrt(x * x + y * y + z * z);
-    };
-    C_Vector3.prototype.normalize = function () { var mag = this.magnitude(); this.x /= mag; this.y /= mag; this.z /= mag; return this; };
-    C_Vector3.prototype.set = function (x, y, z) { this.x = x; this.y = y; this.z = z; return this; };
-    C_Vector3.prototype.multiScalar = function (v) { this.x *= v; this.y *= v; this.z *= v; return this; };
-    C_Vector3.prototype.getArray = function () { return [this.x, this.y, this.z]; };
-    C_Vector3.prototype.getFloatArray = function () { return new Float32Array([this.x, this.y, this.z]); };
-    C_Vector3.prototype.clone = function () { return new C_Vector3(this.x, this.y, this.z); };
-    return C_Vector3;
-}());
-//###########################################################################################
-var C_Matrix4 = /** @class */ (function () {
-    function C_Matrix4() {
-        this.raw = C_Matrix4.identity();
     }
+    normalize() { var mag = this.magnitude(); this.x /= mag; this.y /= mag; this.z /= mag; return this; }
+    set(x, y, z) { this.x = x; this.y = y; this.z = z; return this; }
+    multiScalar(v) { this.x *= v; this.y *= v; this.z *= v; return this; }
+    getArray() { return [this.x, this.y, this.z]; }
+    getFloatArray() { return new Float32Array([this.x, this.y, this.z]); }
+    clone() { return new C_Vector3(this.x, this.y, this.z); }
+}
+//###########################################################################################
+class C_Matrix4 {
+    constructor() { this.raw = C_Matrix4.identity(); }
     //....................................................................
     //Transformations Methods
-    C_Matrix4.prototype.vtranslate = function (v) { C_Matrix4.translate(this.raw, v.x, v.y, v.z); return this; };
-    C_Matrix4.prototype.translate = function (x, y, z) { C_Matrix4.translate(this.raw, x, y, z); return this; };
-    C_Matrix4.prototype.rotateY = function (rad) { C_Matrix4.rotateY(this.raw, rad); return this; };
-    C_Matrix4.prototype.rotateX = function (rad) { C_Matrix4.rotateX(this.raw, rad); return this; };
-    C_Matrix4.prototype.rotateZ = function (rad) { C_Matrix4.rotateZ(this.raw, rad); return this; };
-    C_Matrix4.prototype.vscale = function (vec3) { C_Matrix4.scale(this.raw, vec3.x, vec3.y, vec3.z); return this; };
-    C_Matrix4.prototype.scale = function (x, y, z) { C_Matrix4.scale(this.raw, x, y, z); return this; };
-    C_Matrix4.prototype.invert = function () { C_Matrix4.invert(this.raw); return this; };
+    vtranslate(v) { C_Matrix4.translate(this.raw, v.x, v.y, v.z); return this; }
+    translate(x, y, z) { C_Matrix4.translate(this.raw, x, y, z); return this; }
+    rotateY(rad) { C_Matrix4.rotateY(this.raw, rad); return this; }
+    rotateX(rad) { C_Matrix4.rotateX(this.raw, rad); return this; }
+    rotateZ(rad) { C_Matrix4.rotateZ(this.raw, rad); return this; }
+    vscale(vec3) { C_Matrix4.scale(this.raw, vec3.x, vec3.y, vec3.z); return this; }
+    scale(x, y, z) { C_Matrix4.scale(this.raw, x, y, z); return this; }
+    invert() { C_Matrix4.invert(this.raw); return this; }
     //....................................................................
     //Methods
     //Bring is back to identity without changing the transform values.
-    C_Matrix4.prototype.resetRotation = function () {
+    resetRotation() {
         for (var i = 0; i < this.raw.length; i++) {
             if (i >= 12 && i <= 14)
                 continue;
             this.raw[i] = (i % 5 == 0) ? 1 : 0; //only positions 0,5,10,15 need to be 1 else 0.
         }
         return this;
-    };
+    }
     //reset data back to identity.
-    C_Matrix4.prototype.reset = function () {
+    reset() {
         for (var i = 0; i < this.raw.length; i++)
             this.raw[i] = (i % 5 == 0) ? 1 : 0; //only positions 0,5,10,15 need to be 1 else 0.
         return this;
-    };
+    }
     //....................................................................
     //Static Data Methods
-    C_Matrix4.identity = function () {
+    static identity() {
         var a = new Float32Array(16);
         a[0] = a[5] = a[10] = a[15] = 1;
         return a;
-    };
+    }
     //from glMatrix
-    C_Matrix4.perspective = function (out, fovy, aspect, near, far) {
+    static perspective(out, fovy, aspect, near, far) {
         var f = 1.0 / Math.tan(fovy / 2), nf = 1 / (near - far);
         out[0] = f / aspect;
         out[1] = 0;
@@ -88,8 +77,8 @@ var C_Matrix4 = /** @class */ (function () {
         out[13] = 0;
         out[14] = (2 * far * near) * nf;
         out[15] = 0;
-    };
-    C_Matrix4.ortho = function (out, left, right, bottom, top, near, far) {
+    }
+    static ortho(out, left, right, bottom, top, near, far) {
         var lr = 1 / (left - right), bt = 1 / (bottom - top), nf = 1 / (near - far);
         out[0] = -2 * lr;
         out[1] = 0;
@@ -107,11 +96,11 @@ var C_Matrix4 = /** @class */ (function () {
         out[13] = (top + bottom) * bt;
         out[14] = (far + near) * nf;
         out[15] = 1;
-    };
+    }
     ;
     //https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat4.js
     //make the rows into the columns
-    C_Matrix4.transpose = function (out, a) {
+    static transpose(out, a) {
         //If we are transposing ourselves we can skip a few steps but have to cache some values
         if (out === a) {
             var a01 = a[1], a02 = a[2], a03 = a[3], a12 = a[6], a13 = a[7], a23 = a[11];
@@ -147,9 +136,9 @@ var C_Matrix4 = /** @class */ (function () {
             out[15] = a[15];
         }
         return out;
-    };
+    }
     //Calculates a 3x3 normal matrix (transpose inverse) from the 4x4 matrix
-    C_Matrix4.normalMat3 = function (out, a) {
+    static normalMat3(out, a) {
         var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3], a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7], a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11], a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15], b00 = a00 * a11 - a01 * a10, b01 = a00 * a12 - a02 * a10, b02 = a00 * a13 - a03 * a10, b03 = a01 * a12 - a02 * a11, b04 = a01 * a13 - a03 * a11, b05 = a02 * a13 - a03 * a12, b06 = a20 * a31 - a21 * a30, b07 = a20 * a32 - a22 * a30, b08 = a20 * a33 - a23 * a30, b09 = a21 * a32 - a22 * a31, b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32, 
         // Calculate the determinant
         det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
@@ -166,11 +155,11 @@ var C_Matrix4 = /** @class */ (function () {
         out[7] = (a32 * b02 - a30 * b05 - a33 * b01) * det;
         out[8] = (a30 * b04 - a31 * b02 + a33 * b00) * det;
         return out;
-    };
+    }
     //....................................................................
     //Static Operation
     //https://github.com/gregtatum/mdn-model-view-projection/blob/master/shared/matrices.js
-    C_Matrix4.multiplyVector = function (mat4, v) {
+    static multiplyVector(mat4, v) {
         var x = v[0], y = v[1], z = v[2], w = v[3];
         var c1r1 = mat4[0], c2r1 = mat4[1], c3r1 = mat4[2], c4r1 = mat4[3], c1r2 = mat4[4], c2r2 = mat4[5], c3r2 = mat4[6], c4r2 = mat4[7], c1r3 = mat4[8], c2r3 = mat4[9], c3r3 = mat4[10], c4r3 = mat4[11], c1r4 = mat4[12], c2r4 = mat4[13], c3r4 = mat4[14], c4r4 = mat4[15];
         return [
@@ -179,18 +168,18 @@ var C_Matrix4 = /** @class */ (function () {
             x * c3r1 + y * c3r2 + z * c3r3 + w * c3r4,
             x * c4r1 + y * c4r2 + z * c4r3 + w * c4r4
         ];
-    };
+    }
     //https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/vec4.js, vec4.transformMat4
-    C_Matrix4.transformVec4 = function (out, v, m) {
+    static transformVec4(out, v, m) {
         out[0] = m[0] * v[0] + m[4] * v[1] + m[8] * v[2] + m[12] * v[3];
         out[1] = m[1] * v[0] + m[5] * v[1] + m[9] * v[2] + m[13] * v[3];
         out[2] = m[2] * v[0] + m[6] * v[1] + m[10] * v[2] + m[14] * v[3];
         out[3] = m[3] * v[0] + m[7] * v[1] + m[11] * v[2] + m[15] * v[3];
         return out;
-    };
+    }
     //From glMatrix
     //Multiple two mat4 together
-    C_Matrix4.mult = function (out, a, b) {
+    static mult(out, a, b) {
         var a00 = a[0], a01 = a[1], a02 = a[2], a03 = a[3], a10 = a[4], a11 = a[5], a12 = a[6], a13 = a[7], a20 = a[8], a21 = a[9], a22 = a[10], a23 = a[11], a30 = a[12], a31 = a[13], a32 = a[14], a33 = a[15];
         // Cache only the current line of the second matrix
         var b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3];
@@ -223,10 +212,10 @@ var C_Matrix4 = /** @class */ (function () {
         out[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
         out[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
         return out;
-    };
+    }
     //....................................................................
     //Static Transformation
-    C_Matrix4.scale = function (out, x, y, z) {
+    static scale(out, x, y, z) {
         out[0] *= x;
         out[1] *= x;
         out[2] *= x;
@@ -240,9 +229,9 @@ var C_Matrix4 = /** @class */ (function () {
         out[10] *= z;
         out[11] *= z;
         return out;
-    };
+    }
     ;
-    C_Matrix4.rotateY = function (out, rad) {
+    static rotateY(out, rad) {
         var s = Math.sin(rad), c = Math.cos(rad), a00 = out[0], a01 = out[1], a02 = out[2], a03 = out[3], a20 = out[8], a21 = out[9], a22 = out[10], a23 = out[11];
         // Perform axis-specific matrix multiplication
         out[0] = a00 * c - a20 * s;
@@ -254,8 +243,8 @@ var C_Matrix4 = /** @class */ (function () {
         out[10] = a02 * s + a22 * c;
         out[11] = a03 * s + a23 * c;
         return out;
-    };
-    C_Matrix4.rotateX = function (out, rad) {
+    }
+    static rotateX(out, rad) {
         var s = Math.sin(rad), c = Math.cos(rad), a10 = out[4], a11 = out[5], a12 = out[6], a13 = out[7], a20 = out[8], a21 = out[9], a22 = out[10], a23 = out[11];
         // Perform axis-specific matrix multiplication
         out[4] = a10 * c + a20 * s;
@@ -267,8 +256,8 @@ var C_Matrix4 = /** @class */ (function () {
         out[10] = a22 * c - a12 * s;
         out[11] = a23 * c - a13 * s;
         return out;
-    };
-    C_Matrix4.rotateZ = function (out, rad) {
+    }
+    static rotateZ(out, rad) {
         var s = Math.sin(rad), c = Math.cos(rad), a00 = out[0], a01 = out[1], a02 = out[2], a03 = out[3], a10 = out[4], a11 = out[5], a12 = out[6], a13 = out[7];
         // Perform axis-specific matrix multiplication
         out[0] = a00 * c + a10 * s;
@@ -280,8 +269,8 @@ var C_Matrix4 = /** @class */ (function () {
         out[6] = a12 * c - a02 * s;
         out[7] = a13 * c - a03 * s;
         return out;
-    };
-    C_Matrix4.rotate = function (out, rad, axis) {
+    }
+    static rotate(out, rad, axis) {
         var x = axis[0], y = axis[1], z = axis[2], len = Math.sqrt(x * x + y * y + z * z), s, c, t, a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23, b00, b01, b02, b10, b11, b12, b20, b21, b22;
         if (Math.abs(len) < 0.000001) {
             return null;
@@ -328,10 +317,8 @@ var C_Matrix4 = /** @class */ (function () {
         out[9] = a01 * b20 + a11 * b21 + a21 * b22;
         out[10] = a02 * b20 + a12 * b21 + a22 * b22;
         out[11] = a03 * b20 + a13 * b21 + a23 * b22;
-    };
-    C_Matrix4.invert = function (out, mat) {
-        if (out === void 0) { out = null; }
-        if (mat === void 0) { mat = null; }
+    }
+    static invert(out = null, mat = null) {
         if (mat === undefined)
             mat = out; //If input isn't sent, then output is also input
         var a00 = mat[0], a01 = mat[1], a02 = mat[2], a03 = mat[3], a10 = mat[4], a11 = mat[5], a12 = mat[6], a13 = mat[7], a20 = mat[8], a21 = mat[9], a22 = mat[10], a23 = mat[11], a30 = mat[12], a31 = mat[13], a32 = mat[14], a33 = mat[15], b00 = a00 * a11 - a01 * a10, b01 = a00 * a12 - a02 * a10, b02 = a00 * a13 - a03 * a10, b03 = a01 * a12 - a02 * a11, b04 = a01 * a13 - a03 * a11, b05 = a02 * a13 - a03 * a12, b06 = a20 * a31 - a21 * a30, b07 = a20 * a32 - a22 * a30, b08 = a20 * a33 - a23 * a30, b09 = a21 * a32 - a22 * a31, b10 = a21 * a33 - a23 * a31, b11 = a22 * a33 - a23 * a32, 
@@ -357,14 +344,13 @@ var C_Matrix4 = /** @class */ (function () {
         out[14] = (a31 * b01 - a30 * b03 - a32 * b00) * det;
         out[15] = (a20 * b03 - a21 * b01 + a22 * b00) * det;
         return true;
-    };
+    }
     //https://github.com/toji/gl-matrix/blob/master/src/gl-matrix/mat4.js  mat4.scalar.translate = function (out, a, v) {
-    C_Matrix4.translate = function (out, x, y, z) {
+    static translate(out, x, y, z) {
         out[12] = out[0] * x + out[4] * y + out[8] * z + out[12];
         out[13] = out[1] * x + out[5] * y + out[9] * z + out[13];
         out[14] = out[2] * x + out[6] * y + out[10] * z + out[14];
         out[15] = out[3] * x + out[7] * y + out[11] * z + out[15];
-    };
-    return C_Matrix4;
-}());
+    }
+}
 //# sourceMappingURL=Math.js.map

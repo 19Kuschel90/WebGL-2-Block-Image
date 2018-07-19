@@ -1,6 +1,6 @@
 "use strict";
-var C_Transform = /** @class */ (function () {
-    function C_Transform() {
+class C_Transform {
+    constructor() {
         this.deg2Rad = Math.PI / 180;
         //C_Transform vectors
         this.position = new C_Vector3(0, 0, 0); //Traditional X,Y,Z 3d position
@@ -15,7 +15,7 @@ var C_Transform = /** @class */ (function () {
     }
     //--------------------------------------------------------------------------
     //Methods
-    C_Transform.prototype.updateMatrix = function () {
+    updateMatrix() {
         this.matView.reset() //Order is very important!!
             .vtranslate(this.position)
             .rotateX(this.rotation.x * this.deg2Rad)
@@ -30,20 +30,19 @@ var C_Transform = /** @class */ (function () {
         C_Matrix4.transformVec4(this.right, [1, 0, 0, 0], this.matView.raw); //X
         // console.log(this.matView.raw);
         return this.matView.raw;
-    };
-    C_Transform.prototype.updateDirection = function () {
+    }
+    updateDirection() {
         C_Matrix4.transformVec4(this.forward, [0, 0, 1, 0], this.matView.raw);
         C_Matrix4.transformVec4(this.up, [0, 1, 0, 0], this.matView.raw);
         C_Matrix4.transformVec4(this.right, [1, 0, 0, 0], this.matView.raw);
         return this;
-    };
-    C_Transform.prototype.getViewMatrix = function () { return this.matView.raw; };
-    C_Transform.prototype.getNormalMatrix = function () { return this.matNormal; };
-    C_Transform.prototype.reset = function () {
+    }
+    getViewMatrix() { return this.matView.raw; }
+    getNormalMatrix() { return this.matNormal; }
+    reset() {
         this.position.set(0, 0, 0);
         this.scale.set(1, 1, 1);
         this.rotation.set(0, 0, 0);
-    };
-    return C_Transform;
-}());
+    }
+}
 //# sourceMappingURL=Transform.js.map

@@ -1,10 +1,10 @@
 "use strict";
-var ATTR_POSITION_NAME = "a_position";
-var ATTR_POSITION_LOC = 0;
-var ATTR_NORMAL_NAME = "a_norm";
-var ATTR_NORMAL_LOC = 1;
-var ATTR_UV_NAME = "a_uv";
-var ATTR_UV_LOC = 2;
+const ATTR_POSITION_NAME = "a_position";
+const ATTR_POSITION_LOC = 0;
+const ATTR_NORMAL_NAME = "a_norm";
+const ATTR_NORMAL_LOC = 1;
+const ATTR_UV_NAME = "a_uv";
+const ATTR_UV_LOC = 2;
 function GLInstance(canvasID) {
     var canvas = document.getElementById(canvasID);
     var gl = canvas.getContext("webgl2");
@@ -149,12 +149,10 @@ function GLInstance(canvasID) {
 // Util  Class 
 //--------------------------------------------------
 // wird grade nicht verwendet
-var C_GlUtil = /** @class */ (function () {
-    function C_GlUtil() {
-    }
+class C_GlUtil {
     //Convert Hex colors to float arrays, can batch process a list into one big array.
     //example : GlUtil.rgbArray("#FF0000","00FF00","#0000FF");
-    C_GlUtil.rgbArray = function () {
+    static rgbArray() {
         if (arguments.length == 0)
             return null;
         var rtn = [];
@@ -166,7 +164,6 @@ var C_GlUtil = /** @class */ (function () {
             rtn.push(parseInt(c[p] + c[p + 1], 16) / 255.0, parseInt(c[p + 2] + c[p + 3], 16) / 255.0, parseInt(c[p + 4] + c[p + 5], 16) / 255.0);
         }
         return rtn;
-    };
-    return C_GlUtil;
-}());
+    }
+}
 //# sourceMappingURL=GL.js.map

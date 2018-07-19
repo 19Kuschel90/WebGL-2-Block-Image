@@ -1,42 +1,36 @@
 "use strict";
-var C_Resources = /** @class */ (function () {
-    function C_Resources() {
-    }
+class C_Resources {
     //Setup resource object
-    C_Resources.setup = function (gl, completeHandler) {
+    static setup(gl, completeHandler) {
         C_Resources.gl = gl;
         C_Resources.onComplete = completeHandler;
         return this;
-    };
+    }
     //Start the download queue
-    C_Resources.start = function () {
+    static start() {
         if (C_Resources.Queue.length > 0) {
             C_Resources.loadNextItem();
         }
-    };
+    }
     //===================================================
     // Loading
-    C_Resources.loadTexture = function (name, src) {
+    static loadTexture(name, src) {
         for (var i = 0; i < arguments.length; i += 2) {
             C_Resources.Queue.push({ type: "img", name: arguments[i], src: arguments[i + 1] });
         }
         return this;
-    };
+    }
     // too do
-    C_Resources.loadVideoTexture = function (name, src) {
-        var myarguments = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            myarguments[_i - 2] = arguments[_i];
-        }
+    static loadVideoTexture(name, src, ...myarguments) {
         console.log("too do");
         for (var i = 0; i < myarguments.length; i += 2) {
             C_Resources.Queue.push({ type: "vid", name: myarguments[i], src: myarguments[i + 1] });
         }
         return this;
-    };
+    }
     //===================================================
     // Manage Queue
-    C_Resources.loadNextItem = function () {
+    static loadNextItem() {
         //.......................................
         if (C_Resources.Queue.length == 0) {
             if (C_Resources.onComplete != null)
@@ -72,23 +66,23 @@ var C_Resources = /** @class */ (function () {
                 C_Resources.Videos[itm.name] = vid;
                 break;
         }
-    };
+    }
     //===================================================
     // tagName:any;
     // Event Handlers
-    C_Resources.onDownloadSuccess = function () {
+    static onDownloadSuccess() {
         //Its an image, lets load it up as a texture in gl.
         if (this instanceof Image || this.tagName == "VIDEO") {
             var dat = this.queueData;
             C_Resources.gl.fLoadTexture(dat.name, this);
         }
         C_Resources.loadNextItem();
-    };
-    C_Resources.onDownloadError = function () {
+    }
+    static onDownloadError() {
         console.log("Error getting ", this);
         C_Resources.loadNextItem();
-    };
-    C_Resources.rest = function () {
+    }
+    static rest() {
         C_Resources.gl = null;
         C_Resources.onComplete = null;
         C_Resources.Queue = [];
@@ -96,13 +90,12 @@ var C_Resources = /** @class */ (function () {
         C_Resources.Videos = [];
         C_Resources.queueData = null;
         C_Resources.tagName = null;
-    };
-    C_Resources.onComplete = null;
-    C_Resources.Queue = [];
-    C_Resources.Images = [];
-    C_Resources.Videos = [];
-    C_Resources.queueData = null;
-    C_Resources.tagName = null;
-    return C_Resources;
-}());
+    }
+}
+C_Resources.onComplete = null;
+C_Resources.Queue = [];
+C_Resources.Images = [];
+C_Resources.Videos = [];
+C_Resources.queueData = null;
+C_Resources.tagName = null;
 //# sourceMappingURL=Resources.js.map

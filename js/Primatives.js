@@ -1,10 +1,8 @@
 "use strict";
 var Primatives = {};
-Primatives.CubeBad = /** @class */ (function () {
-    function class_1() {
-    }
-    class_1.createModal = function (gl) { return new C_Modal(Primatives.CubeBad.createMesh(gl)); };
-    class_1.createMesh = function (gl) {
+Primatives.CubeBad = class {
+    static createModal(gl) { return new C_Modal(Primatives.CubeBad.createMesh(gl)); }
+    static createMesh(gl) {
         var aVert = [
             -0.5, 0.5, 0, 0, -0.5, -0.5, 0, 0, 0.5, -0.5, 0, 0, 0.5, 0.5, 0, 0,
             0.5, 0.5, -1, 1, 0.5, -0.5, -1, 1, -0.5, -0.5, -1, 1, -0.5, 0.5, -1, 1 //Back
@@ -19,27 +17,21 @@ Primatives.CubeBad = /** @class */ (function () {
             7, 6, 1, 1, 0, 7 //Left
         ];
         return gl.fCreateMeshVAO("CubeBad", aIndex, aVert, null, aUV, 4);
-    };
-    return class_1;
-}());
-Primatives.Quad = /** @class */ (function () {
-    function class_2() {
     }
-    class_2.createModal = function (gl) { return new C_Modal(Primatives.Quad.createMesh(gl)); };
-    class_2.createMesh = function (gl) {
+};
+Primatives.Quad = class {
+    static createModal(gl) { return new C_Modal(Primatives.Quad.createMesh(gl)); }
+    static createMesh(gl) {
         var aVert = [-0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0], aUV = [0, 0, 0, 1, 1, 1, 1, 0], aIndex = [0, 1, 2, 2, 3, 0];
         var mesh = gl.fCreateMeshVAO("Quad", aIndex, aVert, null, aUV);
         mesh.noCulling = true;
         mesh.doBlending = true;
         return mesh;
-    };
-    return class_2;
-}());
-Primatives.MultiQuad = /** @class */ (function () {
-    function class_3() {
     }
-    class_3.createModal = function (gl) { return new C_Modal(Primatives.MultiQuad.createMesh(gl)); };
-    class_3.createMesh = function (gl) {
+};
+Primatives.MultiQuad = class {
+    static createModal(gl) { return new C_Modal(Primatives.MultiQuad.createMesh(gl)); }
+    static createMesh(gl) {
         var aIndex = [], //0,1,2, 2,3,0
         aUV = [], //0,0, 0,1, 1,1, 1,0 
         aVert = [];
@@ -64,14 +56,11 @@ Primatives.MultiQuad = /** @class */ (function () {
         mesh.noCulling = true;
         mesh.doBlending = true;
         return mesh;
-    };
-    return class_3;
-}());
-Primatives.Cube = /** @class */ (function () {
-    function class_4() {
     }
-    class_4.createModal = function (gl, name, keepRawData) { return new C_Modal(Primatives.Cube.createMesh(gl, name || "Cube", 1, 1, 1, 0, 0, 0, keepRawData)); };
-    class_4.createMesh = function (gl, name, width, height, depth, x, y, z, keepRawData) {
+};
+Primatives.Cube = class {
+    static createModal(gl, name, keepRawData) { return new C_Modal(Primatives.Cube.createMesh(gl, name || "Cube", 1, 1, 1, 0, 0, 0, keepRawData)); }
+    static createMesh(gl, name, width, height, depth, x, y, z, keepRawData) {
         var w = width * 0.5, h = height * 0.5, d = depth * 0.5;
         var x0 = x - w, x1 = x + w, y0 = y - h, y1 = y + h, z0 = z - d, z1 = z + d;
         //Starting bottom left corner, then working counter clockwise to create the front face.
@@ -128,14 +117,11 @@ Primatives.Cube = /** @class */ (function () {
             mesh.aNorm = aNorm;
         }
         return mesh;
-    };
-    return class_4;
-}());
-Primatives.GridAxis = /** @class */ (function () {
-    function class_5() {
     }
-    class_5.createModal = function (gl, incAxis) { return new C_Modal(Primatives.GridAxis.createMesh(gl, incAxis)); };
-    class_5.createMesh = function (gl) {
+};
+Primatives.GridAxis = class {
+    static createModal(gl, incAxis) { return new C_Modal(Primatives.GridAxis.createMesh(gl, incAxis)); }
+    static createMesh(gl) {
         //Dynamiclly create a grid
         var verts = [], size = 1.8, // W/H of the outer box of the grid, from origin we can only go 1 unit in each direction, so from left to right is 2 units max
         div = 10.0, // How to divide up the grid
@@ -213,7 +199,6 @@ Primatives.GridAxis = /** @class */ (function () {
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
         gl.mMeshCache["grid"] = mesh;
         return mesh;
-    };
-    return class_5;
-}());
+    }
+};
 //# sourceMappingURL=Primatives.js.map
