@@ -23,7 +23,7 @@ function GLInstance(canvasID) {
     gl.enable(gl.CULL_FACE); //Cull back face, so only show triangles that are created clockwise
     gl.depthFunc(gl.LEQUAL); //Near things obscure far things
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); //Setup default alpha blending
-    gl.clearColor(1.0, 1.0, 1.0, 1.0); //Set clear color
+    gl.clearColor(1.0, 0.7, 1.0, 1.0); //Set clear color
     //...................................................
     //Methods	
     gl.fClear = function () { this.clear(this.COLOR_BUFFER_BIT | this.DEPTH_BUFFER_BIT); return this; };

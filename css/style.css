@@ -1,3 +1,17 @@
+legend {
+  background-color: #000;
+  color: #fff;
+  padding: 3px 6px;
+}
+
+.output {
+  font: 1rem 'Fira Sans', sans-serif;
+}
+
+input {
+  margin: .4rem;
+}
+
 .input-field {
   background: #bdc4c0;
   width: 600px;
@@ -6,7 +20,6 @@
 
 main {
   margin-top: 40px;
-  background: #0099ff;
 }
 
 section {

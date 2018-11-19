@@ -1,3 +1,4 @@
+@import 'colorpicker';
 $background-inputfeld: #bdc4c0;
 .input-field {
     background: $background-inputfeld;
@@ -7,7 +8,6 @@ $background-inputfeld: #bdc4c0;
 
 main {
     margin-top: 40px;
-    background: #0099ff;
 }
 
 section {

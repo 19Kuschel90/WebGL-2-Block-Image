@@ -23,7 +23,7 @@ function GLInstance(canvasID:string):any{
     gl.depthFunc(gl.LEQUAL); //Near things obscure far things
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); //Setup default alpha blending
 
-	gl.clearColor(1.0,1.0,1.0,1.0);		//Set clear color
+	gl.clearColor(1.0,0.7,1.0,1.0);		//Set clear color
 
 
 	//...................................................

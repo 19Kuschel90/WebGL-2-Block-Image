@@ -111,7 +111,7 @@ Primatives.Cube = class {
         ];
         var mesh = gl.fCreateMeshVAO(name, aIndex, aVert, aNorm, aUV, 4);
         mesh.noCulling = true; //TODO Only setting this true to view animations better.
-        if (keepRawData) {
+        if (keepRawData) { //Have the option to save the data to use for normal debugging or modifying.
             mesh.aIndex = aIndex;
             mesh.aVert = aVert;
             mesh.aNorm = aNorm;
