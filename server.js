@@ -31,7 +31,6 @@ var app = express();
 const root = './public'; // export folder
 const port = process.env.PORT || 4000;
 
-console.log(port);
 app.use(express.static(root));
 app.set('port', port); // z.B: PORT=9000 npm start
 var server = app.listen(port);
