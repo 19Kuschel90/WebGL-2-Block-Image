@@ -1,0 +1,23 @@
+{
+    "name": "myworld_tp4",
+    "version": "1.0.0",
+    "description": "3D Blocks",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js \"console.log('open browser at http://localhost:4000\\n\\n');\" "
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/19Kuschel90/WebGL-2-Block-Image.git"
+    },
+    "author": "Heiko Kuschel",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/19Kuschel90/WebGL-2-Block-Image/issues"
+    },
+    "homepage": "https://github.com/19Kuschel90/WebGL-2-Block-Image#readme",
+    "dependencies": {
+        "express": "^4.16.4",
+        "path": "^0.12.7"
+    }
+}
