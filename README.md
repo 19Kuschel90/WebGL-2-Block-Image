@@ -3,4 +3,4 @@
 
 npm install
 
-node start
+node server.js
